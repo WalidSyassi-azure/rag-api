@@ -11,7 +11,7 @@ from langchain.embeddings import OpenAIEmbeddings
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-API_KEY = os.getenv("API_KEY", "your_default_api_key")  # Custom key for API usage
+API_KEY = os.getenv("API_KEY", "s3cr3t_k3y_9847")  # Custom key for API usage
 
 if not OPENAI_API_KEY:
     raise ValueError("OPENAI_API_KEY not found in .env")
