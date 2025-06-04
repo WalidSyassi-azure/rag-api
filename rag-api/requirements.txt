@@ -1,9 +1,11 @@
 fastapi
 uvicorn
 python-dotenv
+streamlit
 openai
-tiktoken>=0.5.2
-langchain==0.1.13
-langchain-openai==0.1.6
+langchain>=0.1.13
 langchain-community>=0.0.29
+langchain-openai>=0.1.6
+tiktoken>=0.5.2
+unstructured
 faiss-cpu==1.7.4
