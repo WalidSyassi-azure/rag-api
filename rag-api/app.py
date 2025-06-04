@@ -19,15 +19,12 @@ app = FastAPI(title="RAG API")
 
 try:
     embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
-       # Skip loading FAISS now – it will be generated in a separate script
-    # vectorstore = FAISS.load_local("faiss_store", embeddings, allow_dangerous_deserialization=True)
-
-    # Also comment out the qa_chain initialization since it depends on vectorstore
-    # qa_chain = RetrievalQAWithSourcesChain.from_chain_type(
-    #     llm = OpenAI(temperature=0, api_key=OPENAI_API_KEY),
-    #     chain_type="stuff",
-    #     retriever=vectorstore.as_retriever()
-    # )
+    vectorstore = FAISS.load_local("faiss_store", embeddings, allow_dangerous_deserialization=True)
+    qa_chain = RetrievalQAWithSourcesChain.from_chain_type(
+        llm = OpenAI(temperature=0, api_key=OPENAI_API_KEY),
+        chain_type="stuff",
+        retriever=vectorstore.as_retriever()
+    )
 except Exception as e:
     raise RuntimeError(f"Failed to load retriever: {e}")
 
