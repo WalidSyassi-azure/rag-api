@@ -2,7 +2,7 @@ import os
 from fastapi import FastAPI, HTTPException, Request, Header
 from pydantic import BaseModel
 from dotenv import load_dotenv
-from langchain_community.llms import OpenAI
+from langchain_openai import OpenAI
 from langchain.chains import RetrievalQAWithSourcesChain
 from langchain_openai import OpenAIEmbeddings
 from langchain_community.vectorstores import FAISS
@@ -21,7 +21,7 @@ try:
     embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
     vectorstore = FAISS.load_local("faiss_store", embeddings, allow_dangerous_deserialization=True)
     qa_chain = RetrievalQAWithSourcesChain.from_chain_type(
-        llm=OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY),
+        llm = OpenAI(temperature=0, api_key=OPENAI_API_KEY)
         chain_type="stuff",
         retriever=vectorstore.as_retriever()
     )
