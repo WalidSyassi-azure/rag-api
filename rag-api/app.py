@@ -4,8 +4,8 @@ from pydantic import BaseModel
 from dotenv import load_dotenv
 from langchain import OpenAI
 from langchain.chains import RetrievalQAWithSourcesChain
-from langchain.vectorstores import FAISS
-from langchain.embeddings import OpenAIEmbeddings
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
 
 load_dotenv()
 
