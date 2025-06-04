@@ -1,27 +1,33 @@
-from langchain_community.vectorstores import FAISS
-from langchain_openai import OpenAIEmbeddings
-from langchain.docstore.document import Document
 import os
 from dotenv import load_dotenv
+from langchain_community.document_loaders import UnstructuredURLLoader
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from langchain_openai import OpenAIEmbeddings
+from langchain_community.vectorstores import FAISS
 
 load_dotenv()
 
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
-if not OPENAI_API_KEY:
-    raise ValueError("OPENAI_API_KEY not set")
 
-# Initialize OpenAI embeddings
-embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
-
-# Replace this with your actual content
-documents = [
-    Document(page_content="Render is a great platform for deployment.", metadata={"source": "intro.txt"}),
-    Document(page_content="LangChain enables Retrieval-Augmented Generation.", metadata={"source": "rag.txt"})
+# ⚠️ Update your URLs here or dynamically pass them
+urls = [
+    "https://example.com/news1",
+    "https://example.com/news2"
 ]
 
-# Create FAISS index
-vectorstore = FAISS.from_documents(documents, embeddings)
+# Load and split documents
+loader = UnstructuredURLLoader(urls=urls)
+docs = loader.load()
 
-# Save FAISS index
-vectorstore.save_local("faiss_store")
-print("✅ FAISS index saved to 'faiss_store/'")
+text_splitter = RecursiveCharacterTextSplitter(
+    chunk_size=1000,
+    chunk_overlap=100
+)
+splits = text_splitter.split_documents(docs)
+
+# Generate embeddings and save the FAISS index
+embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
+db = FAISS.from_documents(splits, embeddings)
+db.save_local("faiss_store")
+
+print("✅ FAISS store rebuilt successfully!")
