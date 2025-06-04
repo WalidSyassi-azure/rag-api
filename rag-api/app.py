@@ -18,7 +18,8 @@ if not OPENAI_API_KEY:
 app = FastAPI(title="RAG API")
 
 try:
-    vectorstore = FAISS.load_local("faiss_store", OpenAIEmbeddings(), allow_dangerous_deserialization=True)
+    embeddings = OpenAIEmbeddings(api_key=OPENAI_API_KEY)
+    vectorstore = FAISS.load_local("faiss_store", embeddings, allow_dangerous_deserialization=True)
     qa_chain = RetrievalQAWithSourcesChain.from_chain_type(
         llm=OpenAI(temperature=0, openai_api_key=OPENAI_API_KEY),
         chain_type="stuff",
